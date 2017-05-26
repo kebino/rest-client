@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 Mark Kevin Baltazar <markkevinbaltazar@gmail.com> -->
+<component type="desktop">
+    <id>com.github.kebino.rest-client.desktop</id>
+    <metadata_license>CC0</metadata_license>
+    <name>Rest Client</name>
+    <summary>A simple rest client</summary>
+    <description>
+        <p>Simple rest client for testing web api</p>
+    </description>
+</component>
