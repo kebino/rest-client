@@ -78,12 +78,13 @@ namespace RestClient {
             attach(entry_h_val, 2, 2, 1, 1);
             attach(add_header, 3, 2, 1, 1);
 
-             add_header.clicked.connect(() => {
+            add_header.clicked.connect(() => {
                 if(entry_h_key.get_text() == "" || entry_h_val.get_text() == "") {
-                    stdout.printf("key value pair must not be empty\n");
+                    lbl_status.label = "Key Value pair must not be empty";
                     return;
                 }
-                
+                lbl_status.label = "";
+
                 var lbl_k = new Label(entry_h_key.get_text());
                 var lbl_v = new Label(entry_h_val.get_text());
                 var del = new Button.with_label("Remove");
@@ -98,6 +99,8 @@ namespace RestClient {
                     remove(del);
                 });
 
+                entry_h_key.set_text("");
+                entry_h_val.set_text("");
                 show_all();
             });
         }
