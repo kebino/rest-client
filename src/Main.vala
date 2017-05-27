@@ -49,6 +49,12 @@ namespace RestClient {
             var lbl_response = new Gtk.Label("");
             lbl_response.set_line_wrap(true);
 
+            var scrolled = new Gtk.ScrolledWindow (null, null);
+            scrolled.height_request = 350;
+            var label_response = new Gtk.Label("");
+            label_response.set_line_wrap(true);
+            scrolled.add(label_response);
+            
             //submit button
             var submit = new Gtk.Button.with_label("Submit");
             submit.clicked.connect(() => {
@@ -66,7 +72,7 @@ namespace RestClient {
 
                 session.queue_message(message, (sess, mess) => {
                     lbl_response.label = "Response %u".printf(mess.status_code);
-                    stdout.printf("Response Body: \n%s\n", (string)mess.response_body.flatten().data);    
+                    label_response.label = (string)mess.response_body.flatten().data;
                 });
             });
 
@@ -79,6 +85,7 @@ namespace RestClient {
             grid.attach(entry, 1, 0, 1, 1);
             grid.attach(submit, 2, 0, 1, 1);
             grid.attach(lbl_response, 1, 1, 1, 1);
+            grid.attach(scrolled, 0, 2, 3, 2);
 
             this.add(grid);
         }
