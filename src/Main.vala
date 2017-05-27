@@ -57,6 +57,10 @@ namespace RestClient {
 
                 request_page.set_status_text("Waiting For Response");
 
+                foreach (var header in request_page.key_value_list) {
+                    message.request_headers.append(header.key_string, header.value_string);
+                }
+
                 session.queue_message(message, (sess, mess) => {
                     request_page.set_status_text("");
                     response_page.set_response_code_text("%u".printf(mess.status_code));

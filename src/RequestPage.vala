@@ -32,12 +32,15 @@ namespace RestClient {
         private Label lbl_header;
         private Button add_header;
         private Button submit;
+        public List<KeyValue> key_value_list;
 
         public RequestPage() {
             set_border_width(12);
             column_spacing = 6;
             row_spacing = 6;
             orientation = Gtk.Orientation.VERTICAL;
+
+            key_value_list = new List<KeyValue>();
 
             cb_http_methods = new ComboBoxText();
             cb_http_methods.append_text("GET");
@@ -88,6 +91,10 @@ namespace RestClient {
                 var lbl_k = new Label(entry_h_key.get_text());
                 var lbl_v = new Label(entry_h_val.get_text());
                 var del = new Button.with_label("Remove");
+                var kv = new KeyValue() { key_string = lbl_k.label, value_string = lbl_v.label };
+                
+                key_value_list.append(kv);
+
                 insert_row(3);
                 attach_next_to(lbl_k, entry_h_key, Gtk.PositionType.BOTTOM, 1, 1);
                 attach_next_to(lbl_v, entry_h_val, Gtk.PositionType.BOTTOM, 1, 1);
@@ -96,12 +103,16 @@ namespace RestClient {
                 del.clicked.connect(() => {
                     remove(lbl_k);
                     remove(lbl_v);
+                    key_value_list.remove(kv);
+
+                    //  stdout.printf("number of headers: %u\n", key_value_list.length());
                     remove(del);
                 });
 
                 entry_h_key.set_text("");
                 entry_h_val.set_text("");
                 show_all();
+                //  stdout.printf("number of headers: %u\n", key_value_list.length());
             });
         }
 
@@ -120,5 +131,7 @@ namespace RestClient {
         public void set_status_text(string status_text) {
             lbl_status.label = status_text;
         }
+
+       
     }
 }
