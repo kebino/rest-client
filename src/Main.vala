@@ -48,11 +48,13 @@ namespace RestClient {
                 string url = request_page.get_url_text();
                 var session = new Soup.Session();
                 var message = new Soup.Message(method, url);
-                
+            
+
                 if(message.get_uri() == null) {
                     request_page.set_status_text("Invalid URL");
                     return;
                 }
+
                 request_page.set_status_text("Waiting For Response");
 
                 session.queue_message(message, (sess, mess) => {

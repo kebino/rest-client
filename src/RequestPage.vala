@@ -26,13 +26,18 @@ namespace RestClient {
     public class RequestPage : Gtk.Grid { 
         private ComboBoxText cb_http_methods;
         private Entry entry_url;
+        private Entry entry_h_key;
+        private Entry entry_h_val;
         private Label lbl_status;
+        private Label lbl_header;
+        private Button add_header;
         private Button submit;
 
         public RequestPage() {
             set_border_width(12);
             column_spacing = 6;
             row_spacing = 6;
+            orientation = Gtk.Orientation.VERTICAL;
 
             cb_http_methods = new ComboBoxText();
             cb_http_methods.append_text("GET");
@@ -46,15 +51,55 @@ namespace RestClient {
             entry_url.width_request = 350;
             entry_url.hexpand = true;
 
+            entry_h_key = new Entry();
+            entry_h_key.placeholder_text = "Key";
+            entry_h_key.hexpand = true;
+
+            entry_h_val = new Entry();
+            entry_h_val.placeholder_text = "Value";
+            entry_h_val.hexpand = true;
+
             lbl_status = new Label("");
             lbl_status.set_line_wrap(true);
 
+            lbl_header = new Label("<b>Headers</b>");
+            lbl_header.set_use_markup(true);
+            lbl_header.set_line_wrap(true);
+
             submit = new Button.with_label("Submit");
+            add_header = new Button.with_label("Add");
 
             attach(cb_http_methods, 0, 0, 1, 1);
-            attach(entry_url, 1, 0, 1, 1);
-            attach(submit, 2, 0, 1, 1);
-            attach(lbl_status, 1, 1, 1, 1);
+            attach(entry_url, 1, 0, 2, 1);
+            attach(submit, 3, 0, 1, 1);
+            attach(lbl_status, 1, 1, 2, 1);
+            attach(lbl_header, 0, 2, 1, 1);
+            attach(entry_h_key, 1, 2, 1, 1);
+            attach(entry_h_val, 2, 2, 1, 1);
+            attach(add_header, 3, 2, 1, 1);
+
+             add_header.clicked.connect(() => {
+                if(entry_h_key.get_text() == "" || entry_h_val.get_text() == "") {
+                    stdout.printf("key value pair must not be empty\n");
+                    return;
+                }
+                
+                var lbl_k = new Label(entry_h_key.get_text());
+                var lbl_v = new Label(entry_h_val.get_text());
+                var del = new Button.with_label("Remove");
+                insert_row(3);
+                attach_next_to(lbl_k, entry_h_key, Gtk.PositionType.BOTTOM, 1, 1);
+                attach_next_to(lbl_v, entry_h_val, Gtk.PositionType.BOTTOM, 1, 1);
+                attach_next_to(del, add_header, Gtk.PositionType.BOTTOM, 1, 1);
+
+                del.clicked.connect(() => {
+                    remove(lbl_k);
+                    remove(lbl_v);
+                    remove(del);
+                });
+
+                show_all();
+            });
         }
 
         public string get_http_method() {
