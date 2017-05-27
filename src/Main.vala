@@ -25,14 +25,13 @@ namespace RestClient {
 
         public Application() {
 
-            string ENTRY_PLACEHOLDER_TEXT = "Enter URL e.g. http://wwww.example.com";
-
+            //set window params
             this.title = "Rest Client";
             this.window_position = Gtk.WindowPosition.CENTER;
-            
             this.set_default_size(400,400);
             this.destroy.connect(Gtk.main_quit);
 
+            //create notebook for request and response
             var notebook = new Gtk.Notebook();
             var notebook_labels = new List<Gtk.Label>();
             
@@ -40,14 +39,7 @@ namespace RestClient {
             notebook_labels.append(new Gtk.Label("Response"));
             
             var request_page = new RequestPage();
-
-            var scrolled = new Gtk.ScrolledWindow (null, null);
-            scrolled.height_request = 350;
-            scrolled.vexpand = true;
-
-            var lbl_res_body = new Gtk.Label("");
-            lbl_res_body.set_line_wrap(true);
-            scrolled.add(lbl_res_body);
+            var response_page = new ResponsePage();
             
             //set submit callback function
             request_page.get_submit_button().clicked.connect(() => {
@@ -65,13 +57,14 @@ namespace RestClient {
 
                 session.queue_message(message, (sess, mess) => {
                     request_page.set_status_text("");
-                    lbl_res_body.label = (string)mess.response_body.flatten().data;
+                    response_page.set_response_code_text("%u".printf(mess.status_code));
+                    response_page.set_response_body_text((string)mess.response_body.flatten().data);
                     notebook.set_current_page(1);
                 });
             });
 
             notebook.append_page(request_page, notebook_labels.nth_data(0));
-            notebook.append_page(scrolled, notebook_labels.nth_data(1));
+            notebook.append_page(response_page, notebook_labels.nth_data(1));
             this.add(notebook);
         }
 
