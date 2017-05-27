@@ -51,6 +51,7 @@ namespace RestClient {
 
             var scrolled = new Gtk.ScrolledWindow (null, null);
             scrolled.height_request = 350;
+            scrolled.vexpand = true;
             var label_response = new Gtk.Label("");
             label_response.set_line_wrap(true);
             scrolled.add(label_response);
