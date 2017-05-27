@@ -29,66 +29,50 @@ namespace RestClient {
 
             this.title = "Rest Client";
             this.window_position = Gtk.WindowPosition.CENTER;
-            this.set_border_width(12);
+            
+            this.set_default_size(400,400);
             this.destroy.connect(Gtk.main_quit);
 
-            //Combobox with http methods
-            var cb = new Gtk.ComboBoxText();
-            cb.append_text("GET");
-            cb.append_text("POST");
-            cb.append_text("PUT");
-            cb.append_text("DELETE");
-            cb.active = 0;
-
-            //text entry for entering the url
-            var entry = new Gtk.Entry();
-            entry.placeholder_text = ENTRY_PLACEHOLDER_TEXT;
-            entry.width_request = 350;
-            entry.hexpand = true;
-
-            var lbl_response = new Gtk.Label("");
-            lbl_response.set_line_wrap(true);
+            var notebook = new Gtk.Notebook();
+            var notebook_labels = new List<Gtk.Label>();
+            
+            notebook_labels.append(new Gtk.Label("Request"));
+            notebook_labels.append(new Gtk.Label("Response"));
+            
+            var request_page = new RequestPage();
 
             var scrolled = new Gtk.ScrolledWindow (null, null);
             scrolled.height_request = 350;
             scrolled.vexpand = true;
-            var label_response = new Gtk.Label("");
-            label_response.set_line_wrap(true);
-            scrolled.add(label_response);
-            
-            //submit button
-            var submit = new Gtk.Button.with_label("Submit");
-            submit.clicked.connect(() => {
 
-                string method = cb.get_active_text();
-                string url = entry.get_text();
+            var lbl_res_body = new Gtk.Label("");
+            lbl_res_body.set_line_wrap(true);
+            scrolled.add(lbl_res_body);
+            
+            //set submit callback function
+            request_page.get_submit_button().clicked.connect(() => {
+
+                string method = request_page.get_http_method();
+                string url = request_page.get_url_text();
                 var session = new Soup.Session();
                 var message = new Soup.Message(method, url);
                 
                 if(message.get_uri() == null) {
-                    lbl_response.label = "Invalid URL";
+                    request_page.set_status_text("Invalid URL");
                     return;
                 }
-                lbl_response.label = "Waiting For Response";
+                request_page.set_status_text("Waiting For Response");
 
                 session.queue_message(message, (sess, mess) => {
-                    lbl_response.label = "Response %u".printf(mess.status_code);
-                    label_response.label = (string)mess.response_body.flatten().data;
+                    request_page.set_status_text("");
+                    lbl_res_body.label = (string)mess.response_body.flatten().data;
+                    notebook.set_current_page(1);
                 });
             });
 
-            //Grid
-            var grid = new Gtk.Grid();
-            grid.column_spacing = 6;
-            grid.row_spacing = 6;
-
-            grid.attach(cb, 0, 0, 1, 1);
-            grid.attach(entry, 1, 0, 1, 1);
-            grid.attach(submit, 2, 0, 1, 1);
-            grid.attach(lbl_response, 1, 1, 1, 1);
-            grid.attach(scrolled, 0, 2, 3, 2);
-
-            this.add(grid);
+            notebook.append_page(request_page, notebook_labels.nth_data(0));
+            notebook.append_page(scrolled, notebook_labels.nth_data(1));
+            this.add(notebook);
         }
 
         public static int main(string[] args) {
