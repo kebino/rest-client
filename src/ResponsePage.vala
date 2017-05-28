@@ -37,7 +37,7 @@ namespace RestClient {
             row_spacing = 6;
 
             scrolled_res_body = new ScrolledWindow(null, null);
-            scrolled_res_body.height_request = 350;
+            scrolled_res_body.height_request = 250;
             scrolled_res_body.vexpand = true;
             scrolled_res_body.hexpand = true;
 
