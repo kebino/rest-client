@@ -30,8 +30,11 @@ namespace RestClient {
         private Entry entry_h_val;
         private Label lbl_status;
         private Label lbl_header;
+        private Label lbl_body;
         private Button add_header;
         private Button submit;
+        private ScrolledWindow scrolled;
+        private TextView txt_body;
         public List<KeyValue> key_value_list;
 
         public RequestPage() {
@@ -72,48 +75,72 @@ namespace RestClient {
             submit = new Button.with_label("Submit");
             add_header = new Button.with_label("Add");
 
+            lbl_body = new Label("<b>Body</b>");
+            lbl_body.set_use_markup(true);
+            lbl_body.set_line_wrap(true);
+            lbl_body.valign = Gtk.Align.START;
+
+            txt_body = new TextView();
+            txt_body.set_wrap_mode(Gtk.WrapMode.WORD);
+            txt_body.hexpand = false;
+            
+            scrolled = new ScrolledWindow(null, null);
+            scrolled.hexpand = false;
+            scrolled.vexpand = false;
+            
+            scrolled.height_request = 200;
+            scrolled.add(txt_body);
+
+            //method url and submit
             attach(cb_http_methods, 0, 0, 1, 1);
             attach(entry_url, 1, 0, 2, 1);
             attach(submit, 3, 0, 1, 1);
             attach(lbl_status, 1, 1, 2, 1);
+            //header
             attach(lbl_header, 0, 2, 1, 1);
             attach(entry_h_key, 1, 2, 1, 1);
             attach(entry_h_val, 2, 2, 1, 1);
             attach(add_header, 3, 2, 1, 1);
+            //body
+            attach(lbl_body, 0, 4, 1, 1);
+            attach(scrolled, 1, 4, 3, 2);
+            
 
-            add_header.clicked.connect(() => {
-                if(entry_h_key.get_text() == "" || entry_h_val.get_text() == "") {
-                    lbl_status.label = "Key Value pair must not be empty";
-                    return;
-                }
-                lbl_status.label = "";
+            add_header.clicked.connect(add_header_clicked);
+        }
 
-                var lbl_k = new Label(entry_h_key.get_text());
-                var lbl_v = new Label(entry_h_val.get_text());
-                var del = new Button.with_label("Remove");
-                var kv = new KeyValue() { key_string = lbl_k.label, value_string = lbl_v.label };
-                
-                key_value_list.append(kv);
+        private void add_header_clicked() {
+            if(entry_h_key.get_text() == "" || entry_h_val.get_text() == "") {
+                lbl_status.label = "Key Value pair must not be empty";
+                return;
+            }
+            lbl_status.label = "";
 
-                insert_row(3);
-                attach_next_to(lbl_k, entry_h_key, Gtk.PositionType.BOTTOM, 1, 1);
-                attach_next_to(lbl_v, entry_h_val, Gtk.PositionType.BOTTOM, 1, 1);
-                attach_next_to(del, add_header, Gtk.PositionType.BOTTOM, 1, 1);
+            var lbl_k = new Label(entry_h_key.get_text());
+            var lbl_v = new Label(entry_h_val.get_text());
+            var del = new Button.with_label("Remove");
+            var kv = new KeyValue() { key_string = lbl_k.label, value_string = lbl_v.label };
+            
+            key_value_list.append(kv);
 
-                del.clicked.connect(() => {
-                    remove(lbl_k);
-                    remove(lbl_v);
-                    key_value_list.remove(kv);
+            insert_row(3);
+            attach_next_to(lbl_k, entry_h_key, Gtk.PositionType.BOTTOM, 1, 1);
+            attach_next_to(lbl_v, entry_h_val, Gtk.PositionType.BOTTOM, 1, 1);
+            attach_next_to(del, add_header, Gtk.PositionType.BOTTOM, 1, 1);
 
-                    //  stdout.printf("number of headers: %u\n", key_value_list.length());
-                    remove(del);
-                });
+            del.clicked.connect(() => {
+                remove(lbl_k);
+                remove(lbl_v);
+                key_value_list.remove(kv);
 
-                entry_h_key.set_text("");
-                entry_h_val.set_text("");
-                show_all();
                 //  stdout.printf("number of headers: %u\n", key_value_list.length());
+                remove(del);
             });
+
+            entry_h_key.set_text("");
+            entry_h_val.set_text("");
+            show_all();
+            //  stdout.printf("number of headers: %u\n", key_value_list.length());
         }
 
         public string get_http_method() {
@@ -132,6 +159,8 @@ namespace RestClient {
             lbl_status.label = status_text;
         }
 
-       
+        public string get_body_text() {
+            return txt_body.buffer.text;
+        }
     }
 }

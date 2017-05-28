@@ -60,6 +60,8 @@ namespace RestClient {
                 foreach (var header in request_page.key_value_list) {
                     message.request_headers.append(header.key_string, header.value_string);
                 }
+                string str_body = request_page.get_body_text();
+                message.request_body.append( Soup.MemoryUse.COPY, str_body.data);
 
                 session.queue_message(message, (sess, mess) => {
                     request_page.set_status_text("");

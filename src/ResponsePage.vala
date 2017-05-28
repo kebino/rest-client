@@ -50,6 +50,9 @@ namespace RestClient {
 
             lbl_res_body = new Label("");
             lbl_res_body.set_line_wrap(true);
+            lbl_res_body.set_selectable(true);
+            lbl_res_body.valign = Gtk.Align.START;
+            lbl_res_body.halign = Gtk.Align.START;
 
             lbl_res_body_title = new Label("<b>Response Body</b>");
             lbl_res_body_title.set_use_markup(true);
