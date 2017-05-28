@@ -50,6 +50,10 @@ namespace RestClient {
             cb_http_methods.append_text("POST");
             cb_http_methods.append_text("PUT");
             cb_http_methods.append_text("DELETE");
+            cb_http_methods.append_text("HEAD");
+            cb_http_methods.append_text("OPTIONS");
+            cb_http_methods.append_text("PATCH");
+            
             cb_http_methods.active = 0;
 
             entry_url = new Entry();
@@ -103,7 +107,7 @@ namespace RestClient {
             attach(add_header, 3, 2, 1, 1);
             //body
             attach(lbl_body, 0, 4, 1, 1);
-            attach(scrolled, 1, 4, 3, 2);
+            attach(scrolled, 1, 4, 2, 2);
             
 
             add_header.clicked.connect(add_header_clicked);
