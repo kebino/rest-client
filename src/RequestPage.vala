@@ -84,6 +84,7 @@ namespace RestClient {
             lbl_body = new Label("<b>Body</b>");
             lbl_body.set_use_markup(true);
             lbl_body.set_line_wrap(true);
+            lbl_body.valign = Gtk.Align.START;
 
             txt_body = new TextView();
             txt_body.set_wrap_mode(Gtk.WrapMode.WORD);
