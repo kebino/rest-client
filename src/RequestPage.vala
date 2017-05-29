@@ -75,7 +75,6 @@ namespace RestClient {
             lbl_header = new Label("<b>Headers</b>");
             lbl_header.set_use_markup(true);
             lbl_header.set_line_wrap(true);
-            lbl_header.halign = Gtk.Align.START;
 
             submit = new Button.with_label("Submit");
             submit.get_style_context().add_class("blue-color");
