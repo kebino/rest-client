@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 744.09448819 1052.3622047"
+   width="36.124443mm"
+   height="36.124443mm"
+   viewBox="0 0 128 127.99999"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -25,18 +25,22 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="-236.3193"
-     inkscape:cy="789.53566"
+     inkscape:zoom="0.35"
+     inkscape:cx="457.18795"
+     inkscape:cy="123.05549"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     showborder="false"
+     showborder="true"
      inkscape:window-width="1366"
      inkscape:window-height="705"
      inkscape:window-x="0"
      inkscape:window-y="30"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -52,9 +56,11 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(-4.6720123e-6,-924.36221)">
     <g
-       id="g4394">
+       id="g4394"
+       transform="translate(282.78571,726.96429)">
       <g
          id="g4351">
         <rect
@@ -67,7 +73,7 @@
            rx="4"
            ry="4" />
         <rect
-           style="opacity:0.139;fill:#6ac3fa;fill-opacity:1;fill-rule:evenodd;stroke:#e6e6e6;stroke-width:0.88481301px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+           style="opacity:0.13900003;fill:#6ac3fa;fill-opacity:1;fill-rule:evenodd;stroke:#e6e6e6;stroke-width:0.88481301px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            id="rect3336-6"
            width="124.97233"
            height="102.63821"
