@@ -93,7 +93,8 @@ namespace RestClient {
             Gtk.init(ref args);
             var css_provider = new Gtk.CssProvider();
             try {
-                css_provider.load_from_path("data/style.css");
+                //  css_provider.load_from_path("data/style.css");
+                css_provider.load_from_buffer(Stylesheet.STYLE.data);
             }
             catch(Error e) {
                 warning("Error loading css: %s\n", e.message);
