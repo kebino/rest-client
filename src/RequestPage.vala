@@ -75,14 +75,16 @@ namespace RestClient {
             lbl_header = new Label("<b>Headers</b>");
             lbl_header.set_use_markup(true);
             lbl_header.set_line_wrap(true);
+            lbl_header.halign = Gtk.Align.START;
 
             submit = new Button.with_label("Submit");
+            submit.get_style_context().add_class("blue-color");
             add_header = new Button.with_label("Add");
+            add_header.get_style_context().add_class("blue-color");
 
             lbl_body = new Label("<b>Body</b>");
             lbl_body.set_use_markup(true);
             lbl_body.set_line_wrap(true);
-            lbl_body.valign = Gtk.Align.START;
 
             txt_body = new TextView();
             txt_body.set_wrap_mode(Gtk.WrapMode.WORD);
@@ -123,6 +125,7 @@ namespace RestClient {
             var lbl_k = new Label(entry_h_key.get_text());
             var lbl_v = new Label(entry_h_val.get_text());
             var del = new Button.with_label("Remove");
+            del.get_style_context().add_class("red-color");
             var kv = new KeyValue() { key_string = lbl_k.label, value_string = lbl_v.label };
             
             key_value_list.append(kv);

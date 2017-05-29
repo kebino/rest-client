@@ -79,17 +79,30 @@ namespace RestClient {
             var sw = new Gtk.StackSwitcher();
             sw.stack = notebook;
             sw.halign = Gtk.Align.CENTER;
+            sw.vexpand = false;
             
             //put the stack and stack switcher to box
             //then add the box to window
             var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-            vbox.pack_start(sw, true, true, 0);
+            vbox.pack_start(sw, false, false, 12);
             vbox.pack_start(notebook, true, true,0);
             this.add(vbox);
         }
 
         public static int main(string[] args) {
             Gtk.init(ref args);
+            var css_provider = new Gtk.CssProvider();
+            try {
+                css_provider.load_from_path("data/style.css");
+            }
+            catch(Error e) {
+                warning("Error loading css: %s\n", e.message);
+            }
+            Gtk.StyleContext.add_provider_for_screen(
+                Gdk.Screen.get_default(),
+                css_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
             var app = new Application();
             app.show_all();
             Gtk.main();
