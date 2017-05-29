@@ -31,12 +31,13 @@ namespace RestClient {
             this.set_default_size(400,400);
             this.destroy.connect(Gtk.main_quit);
 
-            //create notebook for request and response
-            var notebook = new Gtk.Notebook();
-            var notebook_labels = new List<Gtk.Label>();
+            //create stack for request and response
+            var notebook = new Gtk.Stack();
+            notebook.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
+            notebook.set_transition_duration(400);
             
-            notebook_labels.append(new Gtk.Label("Request"));
-            notebook_labels.append(new Gtk.Label("Response"));
+            string REQUEST_TITLE = "Request";
+            string RESPONSE_TITLE = "Response";
             
             var request_page = new RequestPage();
             var response_page = new ResponsePage();
@@ -67,13 +68,24 @@ namespace RestClient {
                     request_page.set_status_text("");
                     response_page.set_response_code_text("%u".printf(mess.status_code));
                     response_page.set_response_body_text((string)mess.response_body.flatten().data);
-                    notebook.set_current_page(1);
+                    notebook.set_visible_child_name(RESPONSE_TITLE);
                 });
             });
 
-            notebook.append_page(request_page, notebook_labels.nth_data(0));
-            notebook.append_page(response_page, notebook_labels.nth_data(1));
-            this.add(notebook);
+            notebook.add_titled(request_page, REQUEST_TITLE, REQUEST_TITLE);
+            notebook.add_titled(response_page, RESPONSE_TITLE, RESPONSE_TITLE);
+            
+            //create the stack switcher
+            var sw = new Gtk.StackSwitcher();
+            sw.stack = notebook;
+            sw.halign = Gtk.Align.CENTER;
+            
+            //put the stack and stack switcher to box
+            //then add the box to window
+            var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            vbox.pack_start(sw, true, true, 0);
+            vbox.pack_start(notebook, true, true,0);
+            this.add(vbox);
         }
 
         public static int main(string[] args) {
