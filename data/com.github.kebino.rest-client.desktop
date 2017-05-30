@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=Rest Client
-GenericName=Rest Client
-Comment=A simple rest client written in vala for testing web api endpoints.
+Name=RestClient
+GenericName=RestClient
+Comment=A simple rest client for testing web api endpoints.
 Categories=GTK;Utility;Internet;
 Exec=com.github.kebino.rest-client
 Icon=application-default-Icon
 Terminal=false
 Type=Application
-X-GNOME-Gettext-Domain=hello-again
+X-GNOME-Gettext-Domain=rest-client
 Keywords=rest;api;web;client;
