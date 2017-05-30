@@ -1,11 +1,10 @@
 [Desktop Entry]
-Name=RestClient
-GenericName=RestClient
+Name=Rest Client
+GenericName=Rest Client
 Comment=A simple rest client for testing web api endpoints.
-Categories=GTK;Utility;Internet;
+Categories=GTK;Utility;Internet;Development;
 Exec=com.github.kebino.rest-client
-Icon=application-default-Icon
+Icon=com.github.kebino.rest-client
 Terminal=false
 Type=Application
-X-GNOME-Gettext-Domain=rest-client
 Keywords=rest;api;web;client;
