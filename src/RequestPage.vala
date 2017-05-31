@@ -26,24 +26,19 @@ namespace RestClient {
     public class RequestPage : Gtk.Grid { 
         private ComboBoxText cb_http_methods;
         private Entry entry_url;
-        private Entry entry_h_key;
-        private Entry entry_h_val;
         private Label lbl_status;
-        private Label lbl_header;
         private Label lbl_body;
-        private Button add_header;
         private Button submit;
         private ScrolledWindow scrolled;
+        private Box box_hdr;
         private TextView txt_body;
-        public List<KeyValue> key_value_list;
+        public RequestHeaderWidget widget_request_header { get; set; }
 
         public RequestPage() {
             set_border_width(12);
             column_spacing = 6;
             row_spacing = 6;
             orientation = Gtk.Orientation.VERTICAL;
-
-            key_value_list = new List<KeyValue>();
 
             cb_http_methods = new ComboBoxText();
             cb_http_methods.append_text("GET");
@@ -58,28 +53,15 @@ namespace RestClient {
 
             entry_url = new Entry();
             entry_url.placeholder_text = "Enter URL e.g. http://www.example.com";
-            entry_url.width_request = 350;
+            //  entry_url.width_request = 350;
             entry_url.hexpand = true;
-
-            entry_h_key = new Entry();
-            entry_h_key.placeholder_text = "Key";
-            entry_h_key.hexpand = true;
-
-            entry_h_val = new Entry();
-            entry_h_val.placeholder_text = "Value";
-            entry_h_val.hexpand = true;
 
             lbl_status = new Label("");
             lbl_status.set_line_wrap(true);
 
-            lbl_header = new Label("<b>Headers</b>");
-            lbl_header.set_use_markup(true);
-            lbl_header.set_line_wrap(true);
-
             submit = new Button.with_label("Submit");
             submit.get_style_context().add_class("blue-color");
-            add_header = new Button.with_label("Add");
-            add_header.get_style_context().add_class("blue-color");
+            submit.width_request = 70;
 
             lbl_body = new Label("<b>Body</b>");
             lbl_body.set_use_markup(true);
@@ -89,65 +71,91 @@ namespace RestClient {
             txt_body = new TextView();
             txt_body.set_wrap_mode(Gtk.WrapMode.WORD);
             txt_body.hexpand = false;
+            txt_body.vexpand = true;
             
             scrolled = new ScrolledWindow(null, null);
             scrolled.hexpand = false;
-            scrolled.vexpand = false;
+            scrolled.vexpand = true;
             
-            scrolled.height_request = 200;
+            scrolled.height_request = 300;
             scrolled.add(txt_body);
 
-            //method url and submit
-            attach(cb_http_methods, 0, 0, 1, 1);
-            attach(entry_url, 1, 0, 2, 1);
-            attach(submit, 3, 0, 1, 1);
-            attach(lbl_status, 1, 1, 2, 1);
-            //header
-            attach(lbl_header, 0, 2, 1, 1);
-            attach(entry_h_key, 1, 2, 1, 1);
-            attach(entry_h_val, 2, 2, 1, 1);
-            attach(add_header, 3, 2, 1, 1);
-            //body
-            attach(lbl_body, 0, 4, 1, 1);
-            attach(scrolled, 1, 4, 2, 2);
-            
+            //box for http method, url entry, and submit
+            var box1 = new Box(Gtk.Orientation.HORIZONTAL, 6);
+            box1.add(cb_http_methods);
+            box1.add(entry_url);
+            box1.add(submit);
 
-            add_header.clicked.connect(add_header_clicked);
+            //header and body stack
+            box_hdr = new Box(Gtk.Orientation.VERTICAL, 6);
+            widget_request_header = new RequestHeaderWidget();
+            widget_request_header.btn_add.clicked.connect(add_header_clicked);
+            box_hdr.add(widget_request_header);
+
+            var stack = new Stack();
+            stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
+            stack.set_transition_duration(400);
+            stack.add_titled(box_hdr, "Headers", "Headers");
+            stack.add_titled(scrolled, "Body", "Body");
+
+            //the stack switcher
+            var switcher = new StackSwitcher();
+            switcher.stack = stack;
+
+            //add the stackswitcher and stack to a box
+            var box2 = new Box(Gtk.Orientation.VERTICAL, 0);
+            box2.pack_start(switcher, false, false, 3);
+            box2.pack_start(stack, true, true, 0);
+
+            //add all boxes
+            this.add(box1);
+            this.add(box2);
+            
         }
 
         private void add_header_clicked() {
-            if(entry_h_key.get_text() == "" || entry_h_val.get_text() == "") {
-                lbl_status.label = "Key Value pair must not be empty";
+            if(widget_request_header.entry_key.get_text() == "" || widget_request_header.entry_value.get_text() == "") {
+                //lbl_status.label = "Key Value pair must not be empty";
                 return;
             }
-            lbl_status.label = "";
+            //  lbl_status.label = "";
 
-            var lbl_k = new Label(entry_h_key.get_text());
-            var lbl_v = new Label(entry_h_val.get_text());
+            var lbl_k = new Entry();
+            lbl_k.set_text(widget_request_header.entry_key.get_text());
+            lbl_k.editable = false;
+            lbl_k.hexpand = true;
+
+            var lbl_v = new Entry();
+            lbl_v.set_text(widget_request_header.entry_value.get_text());
+            lbl_v.editable = false;
+            lbl_v.hexpand = true;
+
             var del = new Button.with_label("Remove");
             del.get_style_context().add_class("red-color");
-            var kv = new KeyValue() { key_string = lbl_k.label, value_string = lbl_v.label };
+
+            var kv = new KeyValue();
+            kv.key_string = lbl_k.get_text(); 
+            kv.value_string = lbl_v.get_text(); 
             
-            key_value_list.append(kv);
+            widget_request_header.key_value_list.append(kv);
 
-            insert_row(3);
-            attach_next_to(lbl_k, entry_h_key, Gtk.PositionType.BOTTOM, 1, 1);
-            attach_next_to(lbl_v, entry_h_val, Gtk.PositionType.BOTTOM, 1, 1);
-            attach_next_to(del, add_header, Gtk.PositionType.BOTTOM, 1, 1);
+            var row_box = new Box(Gtk.Orientation.HORIZONTAL, 6);
+            row_box.add(lbl_k);
+            row_box.add(lbl_v);
+            row_box.add(del);
 
+            box_hdr.add(row_box);
             del.clicked.connect(() => {
-                remove(lbl_k);
-                remove(lbl_v);
-                key_value_list.remove(kv);
+                widget_request_header.key_value_list.remove(kv);
 
-                //  stdout.printf("number of headers: %u\n", key_value_list.length());
-                remove(del);
+                stdout.printf("Delete, number of headers: %u\n", widget_request_header.key_value_list.length());
+                box_hdr.remove(row_box);
             });
 
-            entry_h_key.set_text("");
-            entry_h_val.set_text("");
+            widget_request_header.entry_key.set_text("");
+            widget_request_header.entry_value.set_text("");
             show_all();
-            //  stdout.printf("number of headers: %u\n", key_value_list.length());
+            stdout.printf("Add, number of headers: %u\n", widget_request_header.key_value_list.length());
         }
 
         public string get_http_method() {

@@ -35,6 +35,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/RequestPage.vala
     src/ResponsePage.vala
     src/KeyValue.vala
+    src/RequestHeaderWidget.vala
     src/Stylesheet.vala
 
     PACKAGES
